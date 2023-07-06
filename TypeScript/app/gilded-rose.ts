@@ -35,23 +35,36 @@ export class GildedRose {
   updateQuality() {
     let special_names = ["Aged Brie", 'Backstage passes to a TAFKAL80ETC concert', 'Sulfuras, Hand of Ragnaros']
 
+
     for (let i = 0; i < this.items.length; i++) {
 
-      if (! special_names.includes(this.items[i].name)) {
+      const original_quality = this.items[i].quality
+      let conjured;
+      let rest_of_name;
+
+      if (this.items[i].name.slice(0,8) === "Conjured") {
+        conjured = true;
+        rest_of_name = this.items[i].name.slice(9);
+      } else {
+        conjured = false;
+        rest_of_name = this.items[i].name;
+      }
+
+      if (! special_names.includes(rest_of_name)) {
         if (this.items[i].sellIn > 0) {
           this.items[i].quality --;
         } else {
           this.items[i].quality -= 2;
         }
           
-      } else if (this.items[i].name == "Aged Brie") {
+      } else if (rest_of_name == "Aged Brie") {
         if (this.items[i].sellIn > 0) {
           this.items[i].quality ++;
         } else {
           this.items[i].quality += 2;
         } 
 
-      } else if (this.items[i].name === 'Backstage passes to a TAFKAL80ETC concert') {
+      } else if (rest_of_name === 'Backstage passes to a TAFKAL80ETC concert') {
         if (this.items[i].sellIn < 1) {
           this.items[i].quality = 0; 
         } else if (this.items[i].sellIn < 6) {
@@ -63,14 +76,20 @@ export class GildedRose {
         }
       }
 
-      if (this.items[i].name !== 'Sulfuras, Hand of Ragnaros') {
+      if (rest_of_name !== 'Sulfuras, Hand of Ragnaros') {
         this.items[i].sellIn --;
       }
 
       if (this.items[i].quality < 0) {
         this.items[i].quality = 0
-      } else if (this.items[i].quality > 50 && this.items[i].name !== "Sulfuras, Hand of Ragnaros") {
+      } else if (this.items[i].quality > 50 && rest_of_name !== "Sulfuras, Hand of Ragnaros") {
         this.items[i].quality = 50
+      }
+
+      if (conjured) {
+        console.log("in conjured")
+        const new_quality = this.items[i].quality
+        this.items[i].quality = 2*new_quality - original_quality;
       }
     }
     return this.items;

@@ -145,3 +145,26 @@ describe("Input checking", () => {
     expect(() => gildedRose.checkItems()).toThrow("Sulfuras quality not 80");
   });
 });
+
+describe("Conjured item testing", () => {
+  it("Testing basic conjured item", () => {
+    const gildedRose = new GildedRose([new Item('Conjured foo', 5, 15)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(13);
+  });
+  it("Testing conjured Aged Brie", () => {
+    const gildedRose = new GildedRose([new Item('Conjured Aged Brie', 5, 15)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(17);
+  });
+  it("Testing conjured backstage passes", () => {
+    const gildedRose = new GildedRose([new Item("Conjured Backstage passes to a TAFKAL80ETC concert", 4, 10)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(16);
+  });
+  it("Testing conjured Sulfuras", () => {
+    const gildedRose = new GildedRose([new Item('Conjured Sulfuras, Hand of Ragnaros', 5, 80)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(80);
+  });
+});
